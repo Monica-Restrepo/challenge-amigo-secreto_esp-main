@@ -1,38 +1,29 @@
+// Array para almacenar los nombres de amigos
 let amigos = [];
 
-/**
- * Función para agregar un amigo a la lista.
- */
-function agregarAmigo() {
-    // Capturar el valor del campo de entrada
-    const input = document.getElementById('nombreInput');
-    const nombre = input.value.trim(); // Elimina espacios en blanco al inicio y al final
+// Función para agregar un amigo a la lista
 
-    // Referencia al elemento donde se mostrarán los mensajes de error
-    const mensaje = document.getElementById('mensaje');
+function agregarAmigo(){
+    const inputAmigo = document.getElementById("amigo");
+    const nombre = inputAmigo.value.trim();
 
-    // Validar la entrada
     if (nombre === "") {
-        mensaje.textContent = "Por favor, inserte un nombre.";
-        return; // Salir de la función si el nombre está vacío
+        alert("Por favor, inserte un nombre.");
+        return;
     }
+   // Actualizar el array de amigos
+   amigos.push(nombre);
+   
+   // Limpiar el campo de entrada
+   inputAmigo.value = "";
 
-    // Actualizar el array de amigos
-    amigos.push(nombre);
-
-    // Actualizar la lista en el DOM
-    actualizarLista();
-
-    // Limpiar el campo de entrada y el mensaje de error
-    input.value = "";
-    mensaje.textContent = "";
+   // Actualizar la lista en el DOM
+   actualizarLista();
 }
 
-/**
- * Función para actualizar la lista de amigos en el HTML.
- */
-function actualizarLista() {
-    const lista = document.getElementById('amigosList');
+// Función para actualizar la lista de amigos
+function actualizarLista(){
+    const lista = document.getElementById('listaAmigos');
     
     // Limpiar la lista actual
     lista.innerHTML = "";
@@ -41,35 +32,32 @@ function actualizarLista() {
     amigos.forEach((amigo, index) => {
         const li = document.createElement('li');
         li.textContent = amigo;
-
-        // Opcional: Añadir un botón para eliminar amigos
-        const btnEliminar = document.createElement('button');
-        btnEliminar.textContent = "Eliminar";
-        btnEliminar.style.marginLeft = "10px";
-        btnEliminar.onclick = function() {
-            eliminarAmigo(index);
-        };
-
-        li.appendChild(btnEliminar);
         lista.appendChild(li);
-    });
+    });     
 }
 
-/**
- * Función para eliminar un amigo de la lista por su índice.
- * @param {number} index - Índice del amigo en el array.
- */
-function eliminarAmigo(index) {
-    amigos.splice(index, 1); // Eliminar del array
-    actualizarLista(); // Actualizar la lista en el DOM
-}
+// Funcion para sortear amigos
+function sortearAmigo() {
+    // Elemento donde se mostrará el resultado
+    const resultado = document.getElementById('resultado');
 
-// Añadir un listener al botón para ejecutar la función al hacer clic
-document.getElementById('agregarBtn').addEventListener('click', agregarAmigo);
-
-// Permitir agregar amigos al presionar "Enter" en el campo de texto
-document.getElementById('nombreInput').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        agregarAmigo();
+    if (amigos.length === 0){
+        alert("No hay amigos en la lista para sortear.");
+        resultado.innerHTML = ""; 
+        return;
     }
-});
+
+    // Generar un índice aleatorio
+    const indiceAleatorio = Math.floor(Math.random() * amigos.length);
+
+    // Obtener el nombre sorteado
+    const amigoSorteado = amigos[indiceAleatorio];
+
+    // Mostrar el resultado en el elemento 'resultado'
+    resultado.innerHTML = `<li>¡El amigo secreto sorteado es: <strong>${amigoSorteado}</strong>!</li>`;
+}
+
+// Ejecutar la inicialización al cargar la página
+window.onload = function() {
+    actualizarLista();
+};
